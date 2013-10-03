@@ -38,7 +38,11 @@ import java.util.TreeSet;
 //import java.util.HashMap;
 
 public class CommandResult implements CommandResultInterface{
-    float user;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8390340890040740644L;
+	float user;
     float system;
     float total;
     public boolean ok = false;
@@ -50,7 +54,9 @@ public class CommandResult implements CommandResultInterface{
     //public HashMap<String, String> info = null;  // info, graphv
 	//public byte image[] = null; // graphv
     
-	public void addFieldName(String fieldname){
+	public CommandResult(){};
+    
+    public void addFieldName(String fieldname){
 		fieldsnamelist.add(fieldname);
 	}
 	

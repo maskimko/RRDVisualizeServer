@@ -46,21 +46,28 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 //import java.util.regex.Matcher;
 //import java.util.regex.Pattern;
 
-public class RRDp  {
+public class RRDp extends UnicastRemoteObject implements RRDProcessorInterface {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1207826787558527344L;
 	public static final int SOCKET_TIMEOUT = 10000;
-	static private Logger logger = Logger.getLogger(RRDp.class.getName());
-	Process rrdtool = null;
-	Socket socket = null;
+	transient static private Logger logger = Logger.getLogger(RRDp.class.getName());
+	private transient Process rrdtool = null;
+	private transient Socket socket = null;
 
-	private OutputStream writer;
-	private InputStream reader;
+	private transient OutputStream writer;
+	private transient InputStream reader;
 
-	public RRDp(String basedir) throws IOException{
+	public RRDp(String basedir) throws RemoteException, IOException{
 		String cmd[] = new String[] { "rrdtool", "-", basedir };
 
 		ProcessBuilder pb = new ProcessBuilder(cmd);
@@ -72,7 +79,7 @@ public class RRDp  {
 		reader = r;
 		writer = rrdtool.getOutputStream();
 	}
-	public RRDp(String basedir, String cachedAddress) throws IOException {
+	public RRDp(String basedir, String cachedAddress) throws RemoteException, IOException {
 		String cmd[] = new String[] { "rrdtool", "-", basedir };
 
 		ProcessBuilder pb = new ProcessBuilder(cmd);
@@ -87,7 +94,7 @@ public class RRDp  {
 		writer = rrdtool.getOutputStream();
 	}
 
-	public RRDp(String host, int port) throws IOException {
+	public RRDp(String host, int port) throws RemoteException, IOException {
 		socket = new Socket();
 		socket.connect(new InetSocketAddress(host, port), SOCKET_TIMEOUT);
 		socket.setSoTimeout(SOCKET_TIMEOUT);
@@ -99,7 +106,7 @@ public class RRDp  {
 	// OK u:0.00 s:0.00 r:17.20
 	//static private Pattern okpat   = Pattern.compile("^OK u:([0-9.]+) s:([0-9.]+) r:([0-9.]+)"); 
 	//static private Pattern infoPat = Pattern.compile("^\\s*(.*?)\\s*=\\s*(.*?)\\s*$");
-	protected synchronized CommandResult sendCommand(String command[]) throws Exception {
+	private synchronized CommandResult sendCommand(String command[]) throws Exception {
 		if (rrdtool == null && socket == null) {
 			throw new Exception("No subprocess available (already closed?)");
 		}
@@ -271,7 +278,7 @@ public class RRDp  {
 		return new String(b, 0, pos);
 	}*/
 
-	public void finish() {
+	private void finish() {
 		if (rrdtool != null || socket != null) {
 			try {
 				if (socket != null) socket.close();
@@ -313,6 +320,11 @@ public class RRDp  {
 			}
 			throw e;
 		}
+	}
+	
+	public TreeSet<RRDRR> executeCommand(String[] cmd) throws RemoteException, Exception{
+		CommandResult cr = sendCommand(cmd);
+		return cr.getOutputObject();
 	}
 
 }
