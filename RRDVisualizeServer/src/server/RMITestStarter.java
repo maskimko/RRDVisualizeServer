@@ -5,6 +5,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import base.RMITestInterface;
+import base.RemoteFileSystem;
 import base.RmiStarter;
 
 public class RMITestStarter extends RmiStarter{
@@ -20,11 +21,15 @@ public class RMITestStarter extends RmiStarter{
 	public void doCustomRmiHandling() {
 		try {
 		RMITestInterface engine = new RMITest() ;
+		RemoteFileSystem rfs = new RemoteFileSystemServer();
 		UnicastRemoteObject.unexportObject(engine, false);
+		UnicastRemoteObject.unexportObject(rfs, false);
 		RMITestInterface engineStub = (RMITestInterface) UnicastRemoteObject.exportObject(engine, 0);
+		RemoteFileSystem rfsStub = (RemoteFileSystem) UnicastRemoteObject.exportObject(rfs, 0);
+		
 		registry  = LocateRegistry.createRegistry(2099);
 		registry.rebind("testserver", engineStub);
-		
+		registry.rebind("RemoteFileSystem", rfsStub);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

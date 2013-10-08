@@ -6,11 +6,13 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 import base.RMITestInterface;
+import base.RemoteFileSystem;
 import base.RmiStarter;
 
 public class RmiClient extends RmiStarter {
 
 	private RMITestInterface engine = null;
+	private RemoteFileSystem remoteFileSystem = null;
 	
 	public RmiClient() {
 		super(RMITestInterface.class);
@@ -30,6 +32,14 @@ public class RmiClient extends RmiStarter {
 		}
 	}
 	
+	private void useRfs() throws RemoteException{
+		
+		File[] files = remoteFileSystem.getFiles(engine.getCurrentFile(), true);
+		for (int i = 0; i < files.length; i++) {
+			System.out.println("remote filesystem: " + files[i].getAbsolutePath());
+		}
+	}
+	
 	@Override
 	public void doCustomRmiHandling() {
 		try {
@@ -38,6 +48,9 @@ public class RmiClient extends RmiStarter {
 		System.out.println(engine.doSomething());
 		listDir();
 		listDir("d:\\transfer");
+		
+		remoteFileSystem = (RemoteFileSystem) registry.lookup("RemoteFileSystem");
+		useRfs();
 
 		} catch (Exception e ) {
 			e.printStackTrace();

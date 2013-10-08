@@ -10,12 +10,13 @@ public class RMITest extends UnicastRemoteObject implements RMITestInterface{
 
 	
 
+	public RMITest(int port) throws RemoteException {
+		super(port);
+	}
 
 
-
-	protected RMITest() throws RemoteException {
+	public RMITest() throws RemoteException {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 
