@@ -55,12 +55,13 @@ public interface RemoteFileSystem extends Remote {
 
 	// File createFileSystemRoot(File f) throws RemoteException;
 
+	/*
 	boolean isHiddenFile(File f) throws RemoteException;
 
 	boolean isParent(File folder, File file) throws RemoteException;
 
 	boolean isRoot(File f) throws RemoteException;
-
+*/
 	Boolean isTraversable(File f) throws RemoteException;
 
 }

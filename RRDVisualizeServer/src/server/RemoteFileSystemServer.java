@@ -37,7 +37,6 @@ public class RemoteFileSystemServer extends UnicastRemoteObject implements
 	public RemoteFileSystemServer() throws RemoteException {
 		super();
 		logger.log(Level.INFO, "exported on default port and receiving calls fs={0}", new Object[] { fs});
-		logger.setLevel(Level.FINE);
 	}
 
 	public File createFileObject(String path) {
@@ -130,25 +129,21 @@ public class RemoteFileSystemServer extends UnicastRemoteObject implements
 
 	
 
-	@Override
 	public boolean isParent(File folder, File file) {
 		
 		return fs.isParent(folder, file);
 	}
 
-	@Override
 	public boolean isRoot(File f) {
 		
 		return fs.isRoot(f);
 	}
 
-	@Override
 	public Boolean isTraversable(File f) {
 		
 		return fs.isTraversable(f);
 	}
 
-	@Override
 	public boolean isHiddenFile(File f) {
 		
 		return fs.isHiddenFile(f);

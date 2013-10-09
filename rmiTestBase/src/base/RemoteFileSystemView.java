@@ -248,36 +248,18 @@ public class RemoteFileSystemView extends FileSystemView {
 		return rfsv;
 	}
 
-	public boolean isHiddenFile(File f) {
-		boolean isHid = false;
-		try {
-		isHid = fs.isHiddenFile(f);
-		} catch (RemoteException re) {
-			re.printStackTrace();
-		}
-		return isHid;
-	}
-
-	public boolean isParent(File folder, File file) {
-		boolean isPa = false;
-		try { 
-			fs.isParent(folder, file);
-		} catch (RemoteException re ) {
-			re.printStackTrace();
-		}
-		return isPa;
-	};
-
-	public boolean isRoot(File f) {
-		boolean isR = false;
-		try {
-			fs.isRoot(f);
-		} catch (RemoteException re) {
-			re.printStackTrace();
-		}
-		return isR;
-	};
-
+	/*
+	 * public boolean isHiddenFile(File f) { boolean isHid = false; try { isHid
+	 * = fs.isHiddenFile(f); } catch (RemoteException re) {
+	 * re.printStackTrace(); } return isHid; }
+	 * 
+	 * public boolean isParent(File folder, File file) { boolean isPa = false;
+	 * try { fs.isParent(folder, file); } catch (RemoteException re ) {
+	 * re.printStackTrace(); } return isPa; };
+	 * 
+	 * public boolean isRoot(File f) { boolean isR = false; try { fs.isRoot(f);
+	 * } catch (RemoteException re) { re.printStackTrace(); } return isR; };
+	 */
 	public Boolean isTraversable(File f) {
 		Boolean isTra = new Boolean(false);
 		try {
