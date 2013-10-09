@@ -128,11 +128,7 @@ public class RemoteFileSystemServer extends UnicastRemoteObject implements
 		return fs.getRoots();
 	}
 
-	@Override
-	public boolean isHiddenFile(File f) {
-		
-		return fs.isHiddenFile(f);
-	}
+	
 
 	@Override
 	public boolean isParent(File folder, File file) {
@@ -150,6 +146,12 @@ public class RemoteFileSystemServer extends UnicastRemoteObject implements
 	public Boolean isTraversable(File f) {
 		
 		return fs.isTraversable(f);
+	}
+
+	@Override
+	public boolean isHiddenFile(File f) {
+		
+		return fs.isHiddenFile(f);
 	}
 
 	/*
