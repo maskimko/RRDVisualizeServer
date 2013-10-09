@@ -37,7 +37,7 @@ public class RemoteFileSystemServer extends UnicastRemoteObject implements
 	public RemoteFileSystemServer() throws RemoteException {
 		super();
 		logger.log(Level.INFO, "exported on default port and receiving calls fs={0}", new Object[] { fs});
-		logger.setLevel(Level.FINE);
+		
 	}
 
 	public File createFileObject(String path) {

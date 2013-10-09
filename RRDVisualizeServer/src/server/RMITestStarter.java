@@ -30,6 +30,9 @@ public class RMITestStarter extends RmiStarter{
 		registry  = LocateRegistry.createRegistry(2099);
 		registry.rebind("testserver", engineStub);
 		registry.rebind("RemoteFileSystem", rfsStub);
+		while(true) {
+			Thread.sleep(5000);
+		}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -38,6 +41,13 @@ public class RMITestStarter extends RmiStarter{
 	
 	public static void main(String[] args){
 		new RMITestStarter();
+		/*while (true) {
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException ie){
+				ie.printStackTrace();
+			}
+		}*/
 	}
 
 }
