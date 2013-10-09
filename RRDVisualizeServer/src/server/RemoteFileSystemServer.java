@@ -128,6 +128,30 @@ public class RemoteFileSystemServer extends UnicastRemoteObject implements
 		return fs.getRoots();
 	}
 
+	@Override
+	public boolean isHiddenFile(File f) {
+		
+		return fs.isHiddenFile(f);
+	}
+
+	@Override
+	public boolean isParent(File folder, File file) {
+		
+		return fs.isParent(folder, file);
+	}
+
+	@Override
+	public boolean isRoot(File f) {
+		
+		return fs.isRoot(f);
+	}
+
+	@Override
+	public Boolean isTraversable(File f) {
+		
+		return fs.isTraversable(f);
+	}
+
 	/*
 	 * public File createFileSystemRoot(File f) { return
 	 * fs.createFileSystemRoot(f); }

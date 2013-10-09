@@ -1,19 +1,17 @@
 package base;
 
 import java.io.File;
-import java.rmi.Remote;
-import java.rmi.RemoteException;
-
-import javax.swing.Icon;
-
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.rmi.AccessException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.Icon;
 import javax.swing.filechooser.FileSystemView;
 
@@ -33,10 +31,10 @@ public class RemoteFileSystemView extends FileSystemView {
 		logger.log(Level.INFO, "Connected to {0} via {1}", new Object[] { url,
 				fs });
 	}
-	
-	public RemoteFileSystemView(RemoteFileSystem rfs) throws RemoteException{
+
+	public RemoteFileSystemView(RemoteFileSystem rfs) throws RemoteException {
 		fs = rfs;
-		logger.log(Level.INFO, "Connected to {0}", new Object[] {rfs } );
+		logger.log(Level.INFO, "Connected to {0}", new Object[] { rfs });
 	}
 
 	public File createFileObject(String path) {
@@ -227,5 +225,43 @@ public class RemoteFileSystemView extends FileSystemView {
 		 */
 		return null;
 	}
+
+	public static FileSystemView getFileSystemView() {
+		RemoteFileSystem rfs = null;
+		Registry regstr = null;
+		RemoteFileSystemView rfsv = null;
+		try {
+			regstr = LocateRegistry.getRegistry("rcu8.sdab.sn", 2099);
+			rfs = (RemoteFileSystem) regstr.lookup("RemoteFileSystem");
+			rfsv = new RemoteFileSystemView(rfs);
+		} catch (AccessException e) {
+
+			e.printStackTrace();
+		} catch (RemoteException e) {
+
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+
+			e.printStackTrace();
+		}
+
+		return rfsv;
+	}
+
+	public boolean isHiddenFile(File f) {
+		return fs.isHiddenFile(f);
+	}
+
+	public boolean isParent(File folder, File file) {
+		return fs.isParent(folder, file);
+	};
+
+	public boolean isRoot(File f) {
+		return fs.isRoot(f);
+	};
+
+	public Boolean isTraversable(File f) {
+		return fs.isTraversable(f);
+	};
 
 }

@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+
 import javax.swing.Icon;
 
 /**
@@ -53,5 +54,27 @@ public interface RemoteFileSystem extends Remote {
 	File[] getRoots() throws RemoteException;
 
 	// File createFileSystemRoot(File f) throws RemoteException;
+	
+
+
+
+
+ boolean isHiddenFile(File f);
+
+ 
+
+
+ boolean isParent(File folder, File file);
+
+ 
+
+
+ boolean isRoot(File f); 
+
+ 
+
+
+ Boolean isTraversable(File f); 
+ 
 
 }
