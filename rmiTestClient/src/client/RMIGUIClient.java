@@ -18,13 +18,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import base.RMITestInterface;
+import base.RemoteFileSystem;
+import base.RemoteFileSystemView;
 import base.RmiStarter;
 
 public class RMIGUIClient extends RmiStarter {
 
 	private Registry reg = null;
-	private RMITestInterface engine = null;
-	private File userCurDir = null, selDirectory = null;
+	
+	private File  selDirectory = null;
 	private JFrame main;
 	private JTextArea listSpace;
 	private boolean away = false;
@@ -33,7 +35,7 @@ public class RMIGUIClient extends RmiStarter {
 		super(RMITestInterface.class);
 	}
 
-	private void init() {
+	private void init(RemoteFileSystem remoteFileSystem) {
 
 		main = new JFrame("Gui chooser test");
 		main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,7 +50,7 @@ public class RMIGUIClient extends RmiStarter {
 		bp.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		JButton chooseDir = new JButton("Choose directory");
 		chooseDir.addActionListener(new ChooseDirectoryButtonListener(
-				userCurDir));
+				remoteFileSystem));
 		bp.add(chooseDir);
 		JButton doList = new JButton("Show listing");
 		doList.addActionListener(new DoListingListener());
@@ -77,18 +79,24 @@ public class RMIGUIClient extends RmiStarter {
 
 	class ChooseDirectoryButtonListener implements ActionListener {
 
-		File userDirectory = null;
-
-		ChooseDirectoryButtonListener(File dir) {
-			userDirectory = dir;
+		RemoteFileSystem remFS = null;
+		
+		ChooseDirectoryButtonListener(RemoteFileSystem remFS) {
+			this.remFS = remFS;
 		}
 
-		public void actionPerformed(ActionEvent ae) {
-			JFileChooser jfc = new JFileChooser();
-			jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		public void actionPerformed(ActionEvent ae){
+			try {
+			RemoteFileSystemView rfsView = new RemoteFileSystemView(remFS);
+			JFileChooser jfc = new JFileChooser(rfsView);
+			jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			
 			int result = jfc.showOpenDialog(main);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				selDirectory = jfc.getSelectedFile();
+			}
+			} catch (RemoteException re) {
+				re.printStackTrace();
 			}
 		}
 	}
@@ -110,13 +118,11 @@ public class RMIGUIClient extends RmiStarter {
 	@Override
 	public void doCustomRmiHandling() {
 		try {
-			reg = LocateRegistry.getRegistry("vm-cacti.sdab.sn", 2099);
-			engine = (RMITestInterface) reg.lookup("testserver");
-			userCurDir = engine.getCurrentFile();
-			System.out.println("I got current dir: "
-					+ userCurDir.getAbsolutePath());
+			reg = LocateRegistry.getRegistry("rcu8.sdab.sn", 2099);
+			RemoteFileSystem rfsStub = (RemoteFileSystem) reg.lookup("RemoteFileSystem"); 
+			
 			System.out.println("Start of init method");
-			init();
+			init(rfsStub);
 			System.out.println("End of init method");
 
 		} catch (NotBoundException nbe) {

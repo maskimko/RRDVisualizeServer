@@ -33,6 +33,11 @@ public class RemoteFileSystemView extends FileSystemView {
 		logger.log(Level.INFO, "Connected to {0} via {1}", new Object[] { url,
 				fs });
 	}
+	
+	public RemoteFileSystemView(RemoteFileSystem rfs) throws RemoteException{
+		fs = rfs;
+		logger.log(Level.INFO, "Connected to {0}", new Object[] {rfs } );
+	}
 
 	public File createFileObject(String path) {
 		logger.entering(this.getClass().getName(), "createFileObject", path);

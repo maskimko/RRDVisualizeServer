@@ -43,11 +43,11 @@ public class RmiClient extends RmiStarter {
 	@Override
 	public void doCustomRmiHandling() {
 		try {
-		Registry registry = LocateRegistry.getRegistry(2099);
+		Registry registry = LocateRegistry.getRegistry("rcu8.sdab.sn", 2099);
 		engine = (RMITestInterface) registry.lookup("testserver");
 		System.out.println(engine.doSomething());
 		listDir();
-		listDir("d:\\transfer");
+		listDir("c:\\");
 		
 		remoteFileSystem = (RemoteFileSystem) registry.lookup("RemoteFileSystem");
 		useRfs();
