@@ -249,6 +249,11 @@ public class RemoteFileImpl extends UnicastRemoteObject implements RemoteFile {
 		
 		return f.toURI();
 	}
+	@Override
+	public String gettoString() throws RemoteException{
+		String name  = f.toString();
+		return name;
+	}
 	
 	
     

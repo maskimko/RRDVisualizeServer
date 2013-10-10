@@ -99,6 +99,7 @@ public interface RemoteFile extends Remote {
 
 	URI toURI() throws RemoteException;
 
-	
+	public String gettoString() throws RemoteException;
+
 
 }

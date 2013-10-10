@@ -16,10 +16,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import base.RMITestInterface;
 import base.RemoteFileSystem;
-import base.RemoteFileSystemView;
+import base.RemoteFileSystemViewSimple;
 import base.RmiStarter;
 
 public class RMIGUIClient extends RmiStarter {
@@ -87,10 +89,11 @@ public class RMIGUIClient extends RmiStarter {
 
 		public void actionPerformed(ActionEvent ae){
 			try {
-			RemoteFileSystemView rfsView = new RemoteFileSystemView(remFS);
-			JFileChooser jfc = new JFileChooser(rfsView);
-			jfc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-			
+			RemoteFileSystemViewSimple rfsView = new RemoteFileSystemViewSimple(remFS);
+			MyFileChooser jfc = new MyFileChooser(rfsView);
+			jfc.setFileSelectionMode(MyFileChooser.FILES_AND_DIRECTORIES);
+			FileFilter ff = new FileNameExtensionFilter("RRD file", "rrd");
+			jfc.setFileFilter(ff);
 			int result = jfc.showOpenDialog(main);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				selDirectory = jfc.getSelectedFile();
@@ -119,6 +122,7 @@ public class RMIGUIClient extends RmiStarter {
 	public void doCustomRmiHandling() {
 		try {
 			reg = LocateRegistry.getRegistry("rcu8.sdab.sn", 2099);
+			//reg = LocateRegistry.getRegistry(2099);
 			RemoteFileSystem rfsStub = (RemoteFileSystem) reg.lookup("RemoteFileSystem"); 
 			
 			System.out.println("Start of init method");
