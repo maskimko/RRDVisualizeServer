@@ -18,7 +18,7 @@ public class RemoteFileSystemViewClient extends FileSystemView {
     
     public RemoteFileSystemViewClient() {
         try {
-            c = (RemoteFileSystemView) Naming.lookup("rmi://localhost:2099/RemoteFileSystem");
+            c = (RemoteFileSystemView) Naming.lookup("rmi://rcu8.sdab.sn:2099/RemoteFileSystem");
         }
         catch (MalformedURLException murle) {
             System.out.println();
@@ -131,7 +131,7 @@ try {
 
 String[] rtempf= c.getRoots();
 
-System.out.println("in");
+//System.out.println("in");
 
 tempf=new File[rtempf.length];
 
